@@ -1,16 +1,44 @@
+# Javascript/NodeJS Conjur Fetch Secret Example
+
+## Summary
+
+[Source file](conjur-fetch-secret.js)
+
+This code performs the following steps:
+
+1. Authenticate to Conjur using the login-user and login-user's apikey to fetch a session token.
+2. Using the session token, fetch the value of a stored secret.
+
+## Setup
+
+This example uses the node `https` and `util` libraries.
+
+```javascript
 const https = require('https');
 const util = require('node:util'); 
+```
 
+When using self-hosted Conjur, a self-signed cert is often used during
+dev.  Set this env var to zero to disable cert checking.
+
+```javascript
 // ignore ssl cert validation -- used for conjur self-signed cert
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+```
 
+## Configuration
 
+These variables will need to be changed to point to your Conjur environment settings.
+
+For reference: <https://docs.conjur.org/Latest/en/Content/Developer/Conjur_API_Authenticate.htm>
+
+**Note: the main variables to change are marked with `-- CHANGEME`**
+
+```javascript
 var host="conjur-host.example.com"; // Conjur Host -- CHANGEME
 var proto="https://";
 var apiprefix = "/api"; // api prefix for Conjur endpoint
 
-// https://docs.conjur.org/Latest/en/Content/Developer/Conjur_API_Authenticate.htm
-// POST /{authenticator}/{account}/{login}/authenticate
 var authenticator = "authn"; // default authenticator
 var account = "conjur"; // default account is "conjur"
 var login = "admin"; // Conjur user -- CHANGEME
@@ -23,7 +51,11 @@ var apikey = "xxx"; // Conjur user's api key -- CHANGEME
 
 // variable identifier URL encoded, e.g. url_encode("vault9/lob9/safe9/secret1");
 var identifier = "vault9%2Flob9%2Fsafe9%2Fsecret1"; // -- CHANGEME
+```
 
+## Step 1 -- Fetch Session Token With User/ApiKey
+
+```javascript
 var options = {
     hostname: host,
     port: 443,
@@ -66,7 +98,13 @@ let request = https.request(url, options, (res) => {
 
 request.write(apikey);
 request.end();
+```
 
+## Step 2 - Fetch Secret From Conjur With Session Token
+
+This is the function that is called after the session token has been obtained.p
+
+```javascript
 // https://docs.conjur.org/Latest/en/Content/Developer/Conjur_API_Retrieve_Secret.htm?tocpath=Developer%7CREST%C2%A0APIs%7C_____8
 function getSecret(sessiontoken, keyidentifier) {
     console.log("ENTERING GET SECRET");
@@ -108,3 +146,10 @@ function getSecret(sessiontoken, keyidentifier) {
     });
     request.end();
 }
+```
+
+## License
+
+This repository is licensed under Apache License 2.0 - see [`LICENSE`](LICENSE) for more details.
+
+## __END__
