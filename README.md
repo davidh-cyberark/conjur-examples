@@ -10,7 +10,7 @@ This repo is a **Community** level project. It's a community contributed project
 
 ## Contributing
 
-No contributions are expected for this repo.
+No outside contributions are expected for this repo.
 
 ## License
 
