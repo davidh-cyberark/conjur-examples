@@ -12,7 +12,7 @@ var apiprefix = "/api"; // api prefix for Conjur endpoint
 // https://docs.conjur.org/Latest/en/Content/Developer/Conjur_API_Authenticate.htm
 // POST /{authenticator}/{account}/{login}/authenticate
 var authenticator = "authn"; // default authenticator
-var account = "dhcybrlab"; // default account is "conjur"
+var account = "conjur"; // default account is "conjur"
 var login = "admin";
 var path = util.format("%s/%s/%s/%s/authenticate", apiprefix, authenticator, account, login);
 
